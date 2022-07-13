@@ -55,6 +55,9 @@ window.addEventListener('keypress', e => {
     break;
   case "Enter":
     state.mode = "run";
+    const [start, end] = state.endpoints;
+    state.grid.bfs(start, end);
+    state.mode = "boundaries";
     break;
   default:
     break;
