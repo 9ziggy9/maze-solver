@@ -1,5 +1,29 @@
-import {ROWS, COLS, CELL_SIZE} from './state.js';
-import {mouse,ctx,canvas} from '../main.js';
+// GLOBAL CONSTANTS
+const FACTOR = 50;
+export const CELL_SIZE = 25;
+export const WIDTH = 16 * FACTOR;
+export const HEIGHT = 9 * FACTOR;
+export const COLS = WIDTH / CELL_SIZE;
+export const ROWS = WIDTH / CELL_SIZE;
+
+export const canvas = document.getElementById('canvas1');
+export const ctx = canvas.getContext('2d');
+
+
+// Initialize canvas dimensions
+canvas.width = WIDTH;
+canvas.height = HEIGHT;
+
+// NEED COORDINATES OF CANVAS TO COMPUTE MOUSE POSITION
+export let canvasPosition = canvas.getBoundingClientRect();
+
+// INTERFACE
+export const mouse = {
+  x: undefined,
+  y: undefined,
+  width: 0.1,
+  height: 0.1,
+};
 
 export class Grid {
   constructor() {

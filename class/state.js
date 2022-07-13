@@ -1,13 +1,5 @@
 import {Grid} from './gfx.js';
 
-// GLOBAL CONSTANTS
-const FACTOR = 50;
-export const CELL_SIZE = 25;
-export const WIDTH = 16 * FACTOR;
-export const HEIGHT = 9 * FACTOR;
-export const COLS = WIDTH / CELL_SIZE;
-export const ROWS = WIDTH / CELL_SIZE;
-
 // GLOBAL STATE
 export class State {
   constructor() {

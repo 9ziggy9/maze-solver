@@ -1,22 +1,5 @@
-import {WIDTH, HEIGHT, CELL_SIZE, State} from './class/state.js';
-
-export const canvas = document.getElementById('canvas1');
-export const ctx = canvas.getContext('2d');
-
-// Initialize canvas dimensions
-canvas.width = WIDTH;
-canvas.height = HEIGHT;
-
-// INTERFACE
-export const mouse = {
-  x: undefined,
-  y: undefined,
-  width: 0.1,
-  height: 0.1,
-};
-
-// NEED COORDINATES OF CANVAS TO COMPUTE MOUSE POSITION
-export let canvasPosition = canvas.getBoundingClientRect();
+import {State} from './class/state.js';
+import {ctx, canvas, canvasPosition, mouse, CELL_SIZE} from './class/gfx.js';
 
 // LISTENERS
 canvas.addEventListener('mousemove', e => {
