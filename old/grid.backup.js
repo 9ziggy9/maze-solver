@@ -249,14 +249,14 @@ window.addEventListener('keypress', e => {
     }
     // CLEAR END POINTS AND BOUNDARIES
     if (e.key === 'q') {
-				ENDPOINTS = [];
-				PATH = [];
-				g.initialize(true);
-				OBSTACLES.forEach(o => {
-					ACCESSIBLE[o.y/CELL_SIZE][o.x/CELL_SIZE] = false;
-				});
-				console.log(ACCESSIBLE);
-				console.log('Cleared path.')
+	ENDPOINTS = [];
+	PATH = [];
+	g.initialize(true);
+	OBSTACLES.forEach(o => {
+		ACCESSIBLE[o.y/CELL_SIZE][o.x/CELL_SIZE] = false;
+	});
+	console.log(ACCESSIBLE);
+	console.log('Cleared path.')
         if (MODE === 'obstacles') {
             OBSTACLES = [];
             g.initialize(true);
