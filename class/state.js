@@ -1,4 +1,4 @@
-import {Grid} from './gfx.js';
+import {Grid, Cell} from './gfx.js';
 
 // GLOBAL STATE
 export class State {
@@ -46,7 +46,7 @@ export class State {
       // previous = current;
       if (current === end) {
 	console.log(`DISCOVERED CELL @ {${current.ix}, ${current.iy}}`);
-	return 1;
+	return 0;
       }
       current.neighborDirs.forEach(dir => {
 	const {dx,dy} = dir;
@@ -58,15 +58,13 @@ export class State {
 	}
       });
     }
-    return 0;
+    return 1;
   }
   djikstra() {
     const [start, end] = this.endpoints;
     let queue = [];
-    // let history = [];
     start.isQueued = true;
     queue.push(start);
-    // history.push({ix: start.ix, iy: start.iy, parent: null});
     while (queue.length > 0) {
       const current = queue.shift();
       if (current === end) {
@@ -75,7 +73,7 @@ export class State {
 	  const {ix, iy} = indices;
 	  this.grid.cells[iy][ix].type = 4;
 	});
-	return 1;
+	return 0;
       }
       current.neighborDirs.forEach(dir => {
 	const {dx,dy} = dir;
@@ -83,14 +81,68 @@ export class State {
 	const neighbor = this.grid.cells[iy+dy][ix+dx];
 	if (neighbor.isQueued === false && neighbor.type !== 1) {
 	  neighbor.isQueued = true;
-	  // history.push({ix: neighbor.ix, iy: neighbor.iy,
-	  // 		parent: {ix: current.ix, iy: current.iy}});
 	  neighbor.parent = current;
 	  queue.push(neighbor); 
 	}
       });
     }
-    return 0;
+    return 1;
+  }
+  astar() {
+    const [start, end] = this.endpoints;
+    let queue = [];
+    start.isQueued = true;
+    queue.push(start);
+    while (queue.length > 0) {
+      const current = queue.shift();
+      if (current === end) {
+	console.log(`DISCOVERED CELL @ {${current.ix}, ${current.iy}}`);
+	this.reconstructPath(current).forEach(indices => { // <--- OPTIONAL. :D
+	  const {ix, iy} = indices;
+	  this.grid.cells[iy][ix].type = 4;
+	});
+	return 0;
+      }
+      current.neighborDirs.forEach(dir => {
+	const {dx,dy} = dir;
+	const {ix, iy} = current;
+	const neighbor = this.grid.cells[iy+dy][ix+dx];
+	if (neighbor.isQueued === false && neighbor.type !== 1) {
+	  neighbor.isQueued = true;
+	  neighbor.parent = current;
+	  neighbor.distance = Cell.euclideanD(neighbor, end);
+	  queue.push(neighbor); 
+	}
+      });
+      queue.sort((a,b) => a.distance - b.distance);
+    }
+    return 1;
+  }
+  aflood() {
+    const [start, end] = this.endpoints;
+    let queue = [];
+    start.isQueued = true;
+    queue.push(start);
+    while (queue.length > 0) {
+      const current = queue.shift();
+      current.type = 4;
+      if (current === end) {
+	console.log(`DISCOVERED CELL @ {${current.ix}, ${current.iy}}`);
+	return 0;
+      }
+      current.neighborDirs.forEach(dir => {
+	const {dx,dy} = dir;
+	const {ix, iy} = current;
+	const neighbor = this.grid.cells[iy+dy][ix+dx];
+	if (neighbor.isQueued === false && neighbor.type !== 1) {
+	  neighbor.isQueued = true;
+	  neighbor.distance = Cell.euclideanD(neighbor, end);
+	  queue.push(neighbor); 
+	}
+      });
+      queue.sort((a,b) => a.distance - b.distance);
+    }
+    return 1;
   }
   reconstructPath(cell) { // <-- could also use recursion, how?
     const path = [];

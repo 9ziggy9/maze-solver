@@ -39,7 +39,7 @@ export class Grid {
   }
 };
 
-class Cell {
+export class Cell {
   constructor(x,y) {
     this.width = CELL_SIZE;
     this.height = CELL_SIZE;
@@ -57,9 +57,15 @@ class Cell {
 	&& dir.dy + (y / CELL_SIZE) < ROWS
 	&& dir.dy + (y / CELL_SIZE) >= 0;
     });
+    this.distance = null;
   }
   //                  up               down          left              right
   static dirs = [{dx: 0, dy:-1}, {dx: 0, dy: 1}, {dx: -1, dy: 0}, {dx: 1, dy: 0}];
+  static euclideanD(cell, target) {
+    const {x, y} = cell;
+    const {x:a, y:b} = target;
+    return Math.sqrt((a-x)**2 + (b-y)**2);
+  }
   static collision(first, second) {
     if (!(first.x > second.x + second.width
 	|| first.x + first.width < second.x

@@ -39,6 +39,7 @@ canvas.addEventListener('click', e => {
   }
 });
 window.addEventListener('keypress', e => {
+  console.log(e.code);
   switch (e.code) {
   case "Space":
     state.clearEndpoints();
@@ -54,10 +55,23 @@ window.addEventListener('keypress', e => {
     state.mode = "flood";
     state.flood();
     state.mode = "boundaries";
+    break;
   case "Enter":
     state.mode = "djikstra";
     console.log("RUNNING DJIKSTRA");
     state.djikstra();
+    state.mode = "boundaries";
+    break;
+  case "KeyA":
+    state.mode = "astar";
+    console.log("RUNNING ASTAR");
+    state.astar();
+    state.mode = "boundaries";
+    break;
+  case "KeyL":
+    state.mode = "aflood";
+    console.log("RUNNING ASTAR FLOOD");
+    state.aflood();
     state.mode = "boundaries";
     break;
   default:
