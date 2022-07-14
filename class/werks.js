@@ -37,29 +37,47 @@ export class Grid {
       }
     }
   }
-};
+  bfs(start, end) {
+    let queue = [];
+    let visited = [];
+    const path = [];
+    queue.push(start);
+    while (queue.length > 0) {
+      let current = queue.shift();
+      visited.push(current);
+      if (current === end) {
+	console.log(`DISCOVERD CELL: ${current.x / CELL_SIZE}, ${current.y / CELL_SIZE}`);
+	return 1;
+      }
+      const ourNeighbors = current
+	    .neighbors.map(dir =>
+	      this.cells[(current.y/CELL_SIZE)+dir.dy][(current.x/CELL_SIZE)+dir.dx])
+	    .filter(neighbor => neighbor.isAccessible = true);
+      ourNeighbors.forEach(neighbor => neighbor.isAccessible = false);
+      queue.push(...ourNeighbors);
+    }
+    return visited;
+  }
+}
 
 class Cell {
   constructor(x,y) {
-    this.width = CELL_SIZE;
-    this.height = CELL_SIZE;
-    this.ix = x / CELL_SIZE;
-    this.iy = y / CELL_SIZE;
     this.x = x;
     this.y = y;
-    this.isQueued = false;
-    this.parent = null;
+    this.width = CELL_SIZE;
+    this.height = CELL_SIZE;
+    this.isAccessible = true;
     // 0 -> accessible, 1 -> boundary, 2 -> start, 3 -> end, 4 -> path
     this.type = 0; 
-    this.neighborDirs = Cell.dirs.filter(dir => {
+    this.neighbors = Cell.dirs.filter(dir => {
       return dir.dx + (x / CELL_SIZE) >= 0
 	&& dir.dx + (x / CELL_SIZE) < COLS
 	&& dir.dy + (y / CELL_SIZE) < ROWS
 	&& dir.dy + (y / CELL_SIZE) >= 0;
     });
   }
-  //                  up               down          left              right
-  static dirs = [{dx: 0, dy:-1}, {dx: 0, dy: 1}, {dx: -1, dy: 0}, {dx: 1, dy: 0}];
+  //                    up              down           right             up
+  static dirs = [{dx: 0, dy: -1}, {dx: 0, dy: 1}, {dx: 1, dy: 0}, {dx: -1, dy: 0}];
   static collision(first, second) {
     if (!(first.x > second.x + second.width
 	|| first.x + first.width < second.x

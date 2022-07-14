@@ -17,22 +17,19 @@ canvas.addEventListener('click', e => {
   switch (state.mode) {
   // types: 0 -> accessible, 1 -> boundary, 2 -> start, 3 -> end, 4 -> path
   case 'boundaries':
-    clicked.isAccessible = clicked.isAccessible ? false : true;
     clicked.type = clicked.type === 1 ? 0 : 1;
     break;
   case 'set-start':
     state.clearEndpoints();
-    if (clicked.isAccessible && !state.endpoints.length) {
+    if (clicked.type === 0 && !state.endpoints.length) {
       clicked.type = 2;
-      clicked.isAccessible = false;
       state.endpoints.push(clicked);
       state.mode = 'set-end';
     }
     break;
   case 'set-end':
-    if (clicked.isAccessible && state.endpoints.length === 1) {
+    if (clicked.type === 0 && state.endpoints.length === 1) {
       clicked.type = 3;
-      clicked.isAccessible = false;
       state.endpoints.push(clicked);
       state.mode = 'set-start';
     }
@@ -53,10 +50,14 @@ window.addEventListener('keypress', e => {
   case "KeyQ":
     state.regenerate();
     break;
+  case "KeyF":
+    state.mode = "flood";
+    state.flood();
+    state.mode = "boundaries";
   case "Enter":
-    state.mode = "run";
-    const [start, end] = state.endpoints;
-    state.grid.bfs(start, end);
+    state.mode = "djikstra";
+    console.log("RUNNING DJIKSTRA");
+    state.djikstra();
     state.mode = "boundaries";
     break;
   default:
@@ -66,7 +67,6 @@ window.addEventListener('keypress', e => {
 
 // INIT
 const state = new State();
-console.log(state.grid.cells);
 
 // HANDLING
 const handleHighlight = () => state.grid.cells.forEach(row => {
