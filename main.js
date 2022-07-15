@@ -64,15 +64,13 @@ window.addEventListener('keypress', e => {
     break;
   case "KeyA":
     state.mode = "astar";
-    console.log("RUNNING ASTAR");
+    console.log("RUNNING astar");
     state.astar();
     state.mode = "boundaries";
     break;
-  case "KeyL":
-    state.mode = "aflood";
-    console.log("RUNNING ASTAR FLOOD");
-    state.aflood();
-    state.mode = "boundaries";
+  case "KeyD":
+    console.log("Hello from debug!");
+    console.log(state.grid.cells[0][0]);
     break;
   default:
     break;
